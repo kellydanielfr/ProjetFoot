@@ -6,14 +6,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import Config.Context;
-import dao.IDAOArticle;
-import model.Article;
-import model.Produit;
+import dao.IDAOEvenement;
+import model.Evenement;
+import model.Evenement;
 
-public class DAOArticleJPA implements IDAOArticle{
+public class DAOEvenementJPA implements IDAOEvenement {
 
 	@Override
-	public void ajouter(Article t) {
+	public void ajouter(Evenement t) {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 		em.getTransaction().begin();
 		em.persist(t);
@@ -22,7 +22,7 @@ public class DAOArticleJPA implements IDAOArticle{
 	}
 
 	@Override
-	public void modifier(Article t) {
+	public void modifier(Evenement t) {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 		em.getTransaction().begin();
 		t=em.merge(t);
@@ -44,18 +44,18 @@ public class DAOArticleJPA implements IDAOArticle{
 	}
 
 	@Override
-	public Article selectById(Integer id) {
+	public Evenement selectById(Integer id) {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
-		Article a = em.find(Article.class, id);
+		Evenement a = em.find(Evenement.class, id);
 		em.close();
 		return a;		
 	}
 
 	@Override
-	public List<Article> selectAll() {
+	public List<Evenement> selectAll() {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 
-		Query maRequete = em.createQuery("from Article",Article.class);
+		Query maRequete = em.createQuery("from Evenement",Evenement.class);
 
 		return maRequete.getResultList();
 	}

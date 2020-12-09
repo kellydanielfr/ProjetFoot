@@ -6,14 +6,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import Config.Context;
-import dao.IDAOArticle;
-import model.Article;
-import model.Produit;
+import dao.IDAOTicket;
+import model.Ticket;
 
-public class DAOArticleJPA implements IDAOArticle{
+
+public class DAOTicketJPA implements IDAOTicket{
 
 	@Override
-	public void ajouter(Article t) {
+	public void ajouter(Ticket t) {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 		em.getTransaction().begin();
 		em.persist(t);
@@ -22,7 +22,7 @@ public class DAOArticleJPA implements IDAOArticle{
 	}
 
 	@Override
-	public void modifier(Article t) {
+	public void modifier(Ticket t) {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 		em.getTransaction().begin();
 		t=em.merge(t);
@@ -44,18 +44,18 @@ public class DAOArticleJPA implements IDAOArticle{
 	}
 
 	@Override
-	public Article selectById(Integer id) {
+	public Ticket selectById(Integer id) {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
-		Article a = em.find(Article.class, id);
+		Ticket a = em.find(Ticket.class, id);
 		em.close();
 		return a;		
 	}
 
 	@Override
-	public List<Article> selectAll() {
+	public List<Ticket> selectAll() {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 
-		Query maRequete = em.createQuery("from Article",Article.class);
+		Query maRequete = em.createQuery("from Ticket",Ticket.class);
 
 		return maRequete.getResultList();
 	}
