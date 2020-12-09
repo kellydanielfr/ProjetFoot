@@ -563,7 +563,7 @@ public class AppFoot {
 	
 	private static void prisePari() {
 		//TODO: Selectioner pari
-		//TODO: ajouter au panier
+		//TODO: ajouter au panier.
 	}
 
 	private static void afficherParie() {
