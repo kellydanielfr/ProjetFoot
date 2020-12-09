@@ -12,5 +12,6 @@ public interface IDAOCompte extends IDAO<Compte,Integer> {
 	public List<Adherent> SelectAdherent();
 	
 	public Compte SelectByLoginMdp(String login, String mdp);
+	public Compte SelectByLogin(String login);
 
 }

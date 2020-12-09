@@ -92,5 +92,16 @@ public class DAOCompteJPA implements IDAOCompte {
 		
 	}
 
+	@Override
+	public Compte SelectByLogin(String login) {
+		EntityManager em=Context.getInstance().getEmf().createEntityManager();
+		
+		
+		Query maRequete = em.createQuery("from Compte c  where c.login=:loginReq",Admin.class);
+		maRequete.setParameter("loginReq",login);
+		Compte c = (Compte) maRequete.getSingleResult();
+		return c;
+	}
+
 	
 }

@@ -533,8 +533,7 @@ public class AppFoot {
 		case 3:consulterParies(connected);break;
 		case 4:afficherTickets();break;
 		case 5:consulterPanier();break;
-		//TODO:modifCompte
-		case 6:modifCompte();break;
+		//TODO:case 6:modifCompte();break;
 		case 7:menuPrincipal();;break;
 		default: menuAdherent(connected); break;
 		}
