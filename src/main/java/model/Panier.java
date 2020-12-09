@@ -1,11 +1,18 @@
 package model;
 
+import java.util.List;
+import java.util.Map;
+
 public class Panier {
 	
-	private double total;
+	private Map<Produit, Integer> panier;
+	private double total=0;
 	
-	public static void ajouterPanier() {
-		
+	
+	public Panier() {}
+
+	public void ajouterPanier(Article article, Integer qte) {
+		panier.put(article,qte);
 	}
 	
 	public static void totalPanier() {
@@ -23,4 +30,22 @@ public class Panier {
 	public static void showPanier() {
 		
 	}
+
+	public Map<Produit,Integer> getPanier() {
+		return panier;
+	}
+
+	public void setPanier(Map<Produit,Integer> panier) {
+		this.panier = panier;
+	}
+
+	public double getTotal() {
+		return total;
+	}
+
+	public void setTotal(double total) {
+		this.total = total;
+	}
+	
+	
 }

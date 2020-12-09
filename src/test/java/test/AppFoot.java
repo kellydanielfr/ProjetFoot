@@ -7,7 +7,8 @@ import Config.Context;
 import model.*;
 
 public class AppFoot {
-
+	private static Panier panier = new Panier();
+	
 	public static int saisieInt(String msg) 
 	{
 		System.out.println(msg);
@@ -117,17 +118,54 @@ public class AppFoot {
 			System.out.println(a);
 		}
 		
-		//TODO: fonction "detail article"
-		//TODO: fonction "ajouter au panier"
+		String choix = saisieString("Voulez-vous choisir un article ?");
+		if(choix.equals("Y")) {
+			int num_article = saisieInt("Entrez le numero de l'article");
+			Article article = Context.getInstance().getDaoArticle().selectById(num_article);
+			System.out.println(article);
+			String choix_article = saisieString("Voulez-vous ajouter l'article au panier ?");
+			if (choix_article.equals("Y")) {
+				Integer qte = saisieInt("Ajoutez votre quantite");
+				panier.ajouterPanier(article,qte);
+			}
+		}
 	}
 
 	private static void consulterPanier() {
-		//TODO: function afficher panier 
+		System.out.println(panier.getPanier());
+		
+		System.out.println("Voulez-vous:");
+		System.out.println("1 - Editer le panier");
+		System.out.println("2 - Payer");
+		System.out.println("3 - Continuer vos achats");
+		
+		int choix = saisieInt("");
+		switch(choix) 
+		{
+		case 1:editPanier();break;
+		case 2:payer();break;
+		case 3:consulterArticles();break;
+		default: consulterPanier(); break;
+		}
+		
+		consulterPanier();
+		
 		//TODO: function editerPanier
 		//TODO: Fonction Payment
-
 	}
 
+	private static void editPanier() {
+		System.out.println(panier.getPanier());
+		
+		int choix = saisieInt("Choisir l'article à modifier:");
+		
+	}
+
+	private static void payer() {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	//Connection
 	private static void menuLogin() {
 
@@ -147,7 +185,7 @@ public class AppFoot {
 		}
 		else if(connected instanceof Adherent)
 		{
-			menuClient((Adherent) connected);
+			menuAdherent((Adherent) connected);
 		}
 	}
 
@@ -348,19 +386,19 @@ public class AppFoot {
 	}	
 
 	private static void ajouterArticles(Compte connected) {
-		System.out.println("Creer Article ");
+		System.out.println("Creer un article ");
 
-		String nom= saisieString("nom");
-		double prix = saisieDouble("prix");
-		Integer quantite = saisieInt("Quantite");
-		String taille= saisieString("taille");
-		String description= saisieString("description");
+		String nom= saisieString("Entrez le nom");
+		double prix = saisieDouble("Entrez le prix");
+		Integer quantite = saisieInt("Entrez une quantitee");
+		String taille= saisieString("Entrez une taille");
+		String description= saisieString("Entrez la description");
 
 		Article a = new Article(nom, prix, quantite, taille, description);
 
 		Context.getInstance().getDaoArticle().ajouter(a);
 
-		System.out.println("Article cree!");
+		System.out.println("L'article a été crée!");
 		menuAdmin(connected);	
 	}
 
@@ -369,11 +407,11 @@ public class AppFoot {
 
 		Article a = Context.getInstance().getDaoArticle().selectById(choix);	
 
-		String nom= saisieString("nom");
-		double prix = saisieDouble("prix");
-		Integer quantite = saisieInt("Quantite");
-		String taille= saisieString("taille");
-		String description= saisieString("description");
+		String nom= saisieString("Modifier le nom");
+		double prix = saisieDouble("Modifier le prix");
+		Integer quantite = saisieInt("Modifier une quantitee");
+		String taille= saisieString("Modifier la taille");
+		String description= saisieString("Modifier la description");
 
 		a.setNom(nom);
 		a.setPrix(prix);
@@ -389,7 +427,6 @@ public class AppFoot {
 
 		int choix=saisieInt("Choisir un article");
 
-
 		Context.getInstance().getDaoArticle().supprimer(choix);
 
 		System.out.println("Article supprimer!!");	
@@ -397,11 +434,11 @@ public class AppFoot {
 
 	//Manipulation tickets
 	private static void editerTickets(Compte connected) {
-		System.out.println("1 - Afficher Tickets");
-		System.out.println("2 - Ajouter des Tickets");
-		System.out.println("3 - Modifier Tickets");
-		System.out.println("4 - Supprimer Tickets");
-		System.out.println("5 - Return");
+		System.out.println("1 - Afficher les tickets");
+		System.out.println("2 - Ajouter des tickets");
+		System.out.println("3 - Modifier des tickets");
+		System.out.println("4 - Supprimer des tickets");
+		System.out.println("5 - Retour");
 		int choix = saisieInt("");
 		switch(choix) 
 		{
@@ -424,15 +461,15 @@ public class AppFoot {
 	}
 
 	private static void ajouterTickets(Compte connected) {
-		System.out.println("Creer Ticket ");
+		System.out.println("Creer des tickets ");
 
-		double prix = saisieDouble("prix");
-		Integer quantite = saisieInt("Quantite");
+		double prix = saisieDouble("Entrez le prix");
+		Integer quantite = saisieInt("Entrez un qantite");
 
-		String d= saisieString("Date");
+		String d= saisieString("Entrez une date");
 		LocalDate date = LocalDate.parse(d);
 
-		String lieu= saisieString("Lieu");
+		String lieu= saisieString("Entrez un lieu");
 
 
 		Ticket t = new Ticket(prix, quantite, date, lieu);
@@ -440,7 +477,7 @@ public class AppFoot {
 
 		Context.getInstance().getDaoTicket().ajouter(t);
 
-		System.out.println("Ticket cree!");
+		System.out.println("Les tickets ont été crées!");
 		menuAdmin(connected);		
 	}
 
@@ -449,13 +486,13 @@ public class AppFoot {
 
 		Ticket t = Context.getInstance().getDaoTicket().selectById(choix);	
 
-		double prix = saisieDouble("prix");
-		Integer quantite = saisieInt("Quantite");
+		double prix = saisieDouble("Modifier le prix");
+		Integer quantite = saisieInt("Modifier la quantite");
 
-		String d= saisieString("Date");
+		String d= saisieString("Modifier la date");
 		LocalDate date = LocalDate.parse(d);
 
-		String lieu= saisieString("Lieu");
+		String lieu= saisieString("Modifier le lieu");
 
 		t.setPrix(prix);
 		t.setQuantite(quantite);
@@ -472,20 +509,21 @@ public class AppFoot {
 
 		Context.getInstance().getDaoTicket().supprimer(choix);
 
-		System.out.println("Ticket supprimer!!");	
+		System.out.println("Les tickets ont été supprimés!!");	
 
 	}
 
 	//Menu Client
-	private static void menuClient(Adherent connected) {
+	private static void menuAdherent(Adherent connected) {
 
 		System.out.println("Choisir un menu :");
-		System.out.println("1 - Consulter Evenements");
-		System.out.println("2 - Consulter Articles");
-		System.out.println("3 - Consulter Paries");
-		System.out.println("4 - Consulter Tickets");
-		System.out.println("5 - Consulter Panier");
-		System.out.println("6 - Deconnexion");
+		System.out.println("1 - Consulter les evenements");
+		System.out.println("2 - Consulter les articles");
+		System.out.println("3 - Consulter les paries");
+		System.out.println("4 - Consulter les tickets");
+		System.out.println("5 - Consulter mon panier");
+		System.out.println("6 - Modifier mon compte");
+		System.out.println("7 - Deconnexion");
 
 		int choix = saisieInt("");
 		switch(choix) 
@@ -495,11 +533,13 @@ public class AppFoot {
 		case 3:consulterParies(connected);break;
 		case 4:afficherTickets();break;
 		case 5:consulterPanier();break;
-		case 6:menuPrincipal();;break;
-		default: menuClient(connected); break;
+		//TODO:modifCompte
+		case 6:modifCompte();break;
+		case 7:menuPrincipal();;break;
+		default: menuAdherent(connected); break;
 		}
 
-		menuClient(connected);
+		menuAdherent(connected);
 	}
 
 
@@ -513,24 +553,21 @@ public class AppFoot {
 		switch(choix) 
 		{
 		case "Y":prisePari();break;
-		case "N":menuClient(connected);break;
+		case "N":menuAdherent(connected);break;
 		default : consulterParies(connected);break;
 		}
 
-
-
-		//function prise de parie
-		//function ajouterPanier
-
+		//TODO:function prise de parie
+		//TODO: function ajouter Panier
 	}
 	
 	private static void prisePari() {
-		//Selectioner pari
-		//ajouter au panier
+		//TODO: Selectioner pari
+		//TODO: ajouter au panier
 	}
 
 	private static void afficherParie() {
-		// afficher le Planning		
+		// TODO: afficher les paris		
 	}
 
 	public static void main(String[] args) {
