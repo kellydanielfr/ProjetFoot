@@ -1,16 +1,10 @@
 package test;
 
-
-
 import java.time.LocalDate;
 import java.util.Scanner;
 
 import Config.Context;
 import model.*;
-
-
-
-
 
 public class AppFoot {
 
@@ -38,12 +32,12 @@ public class AppFoot {
 
 
 	private static void menuPrincipal() {
-		System.out.println("\nFoot FC");
+		System.out.println("\nBienvenue sur le site de Foot FC");
 		System.out.println("Choisir un menu :");
-		System.out.println("1 - Login");
-		System.out.println("2 - Visiteur");
-		System.out.println("3 - Cree un Compte");
-		System.out.println("4 - Exit AppFoot");
+		System.out.println("1 - Connection");
+		System.out.println("2 - Visiter le site");
+		System.out.println("3 - Créer un Compte");
+		System.out.println("4 - Sortir");
 
 		int choix = saisieInt("");
 		switch(choix) 
@@ -52,6 +46,7 @@ public class AppFoot {
 		case 2:visiteur();break;
 		case 3:creeCompte();break;
 		case 4:System.exit(0);break;
+		default: menuPrincipal(); break;
 		}
 
 		menuPrincipal();
@@ -59,34 +54,29 @@ public class AppFoot {
 
 	private static void creeCompte() {
 
-		System.out.println("Pour cr�er votre compte merci d'indiquer les informations suivantes ");
-
-		String nom= saisieString("nom");
-		String prenom= saisieString("prenom");
+		System.out.println("Pour créer votre compte merci d'indiquer les informations suivantes: ");
 
 		String login = null;
-
 		do {
-			login= saisieString("login");
+			login= saisieString("Entrez votre login");
 		} while (Context.getInstance().getDaoCompte().SelectByLogin(login) != null);
-
-
-
-		String password= saisieString("password");
-		double solde= saisieDouble("solde");
-		Integer num_voie= saisieInt("num_voie");
-		String voie= saisieString("voie");
-		String code_postal= saisieString("code_postal");
-		String ville= saisieString("ville");
+		String password= saisieString("Entrez votre password");
+		
+		String nom= saisieString("Votre nom:");
+		String prenom= saisieString("Votre prenom:");
+		double solde= saisieDouble("Votre solde");
+		
+		System.out.println("Entrez maintenant les données de votre adresse: ");
+		Integer num_voie= saisieInt("Numero de voie");
+		String voie= saisieString("Nom de la voie");
+		String code_postal= saisieString("Code postal");
+		String ville= saisieString("Ville");
 
 		Adresse adresse = new Adresse(num_voie, voie, code_postal,ville);
-		Adherent adh = new Adherent(nom, prenom, login, password, solde, adresse);
 
-		Context.getInstance().getDaoCompte().ajouter(adh);
+		Context.getInstance().getDaoCompte().ajouter(new Adherent(nom, prenom, login, password, solde, adresse));
 
-		System.out.println("Compte cree!");
-		menuPrincipal();
-
+		System.out.println("Votre compte a été crée!");
 	}
 
 
@@ -94,10 +84,10 @@ public class AppFoot {
 	//Menus visiteurs
 	private static void visiteur() {
 		System.out.println("Choisir un menu :");
-		System.out.println("1 - Consulter Evenements");
-		System.out.println("2 - Consulter Articles");
-		System.out.println("3 - Consulter Panier");
-		System.out.println("4 - Exit AppFoot");
+		System.out.println("1 - Consulter les evenements");
+		System.out.println("2 - Consulter les articles");
+		System.out.println("3 - Consulter mon panier");
+		System.out.println("4 - Retour à l'accueil");
 
 		int choix = saisieInt("");
 		switch(choix) 
@@ -105,7 +95,8 @@ public class AppFoot {
 		case 1:consulterEvenemets();break;
 		case 2:consulterArticles();break;
 		case 3:consulterPanier();break;
-		case 4:System.exit(0);break;
+		case 4:menuPrincipal();break;
+		default: visiteur(); break;
 		}
 
 		visiteur();
@@ -124,13 +115,16 @@ public class AppFoot {
 		for(Article a : Context.getInstance().getDaoArticle().selectAll()) 
 		{
 			System.out.println(a);
-		}	
+		}
+		
+		//TODO: fonction "detail article"
+		//TODO: fonction "ajouter au panier"
 	}
 
 	private static void consulterPanier() {
-		//function afficher panier 
-		//function editerPanier
-		//Payment
+		//TODO: function afficher panier 
+		//TODO: function editerPanier
+		//TODO: Fonction Payment
 
 	}
 
@@ -155,16 +149,15 @@ public class AppFoot {
 		{
 			menuClient((Adherent) connected);
 		}
-
 	}
 
 	//Menu Admin
 	private static void menuAdmin(Compte connected) {
-		System.out.println("1 - Editer Compte");
-		System.out.println("2 - Editer Evenementes");
-		System.out.println("3 - Editer Articles");
-		System.out.println("4 - Editer Tickets");
-		System.out.println("5 - Exit AppFoot");
+		System.out.println("1 - Gestion des comptes");
+		System.out.println("2 - Gestion des evenementes");
+		System.out.println("3 - Gestion des articles");
+		System.out.println("4 - Gestion des tickets");
+		System.out.println("5 - Deconnection");
 
 		int choix = saisieInt("");
 		switch(choix) 
@@ -173,7 +166,7 @@ public class AppFoot {
 		case 2:editerEvenemets(connected);break;
 		case 3:editerArticles(connected);break;
 		case 4:editerTickets(connected);break;
-		case 5:System.exit(0);break;
+		case 5:menuPrincipal();;break;
 		default: menuAdmin(connected); break;
 		}
 
@@ -182,25 +175,24 @@ public class AppFoot {
 
 	//Manipulation Comptes
 	private static void editerCompte(Compte connected) {
-		System.out.println("1 - Afficher Compte");
-		System.out.println("2 - Modifier Compte");
-		System.out.println("3 - Supprimer Compte");
-		System.out.println("4 - Return");
+		System.out.println("1 - Afficher les comptes");
+		System.out.println("2 - Modifier un compte");
+		System.out.println("3 - Supprimer un compte");
+		System.out.println("4 - Retour");
 		int choix = saisieInt("");
 		switch(choix) 
 		{
-		case 1:afficherCompte();break;
+		case 1:afficherComptes();break;
 		case 2:modifierCompte();break;
 		case 3:supprimerCompte();break;
 		case 4:menuAdmin(connected);break;
-
 		default: editerCompte(connected); break;
 		}	
 
 		editerCompte(connected);
 	}
 
-	private static void afficherCompte() {
+	private static void afficherComptes() {
 		System.out.println("\nListe des Comptes : \n");
 		for(Compte c : Context.getInstance().getDaoCompte().selectAll()) 
 		{
@@ -209,30 +201,28 @@ public class AppFoot {
 	}
 
 	private static void modifierCompte() {
-		afficherCompte();
+		afficherComptes();
 
 		int choix=saisieInt("Choisir un compte");
 
 		Adherent c = (Adherent) Context.getInstance().getDaoCompte().selectById(choix);
 
-
-		String nom= saisieString("nom");
-		String prenom= saisieString("prenom");
-
 		String login = null;
-
 		do {
-			login= saisieString("login");
+			login= saisieString("Entrez le login:");
 		} while (Context.get_instance().getDaoCompte().SelectByLogin(login) != null);
+		
+		String nom= saisieString("Entrez le nom:");
+		String prenom= saisieString("Entrez le prenom:");
 
-
-
-		String password= saisieString("password");
-		double solde= saisieDouble("solde");
-		Integer num_voie= saisieInt("num_voie");
-		String voie= saisieString("voie");
-		String code_postal= saisieString("code_postal");
-		String ville= saisieString("ville");
+		String password= saisieString("Entrez le password:");
+		double solde= saisieDouble("Entrez le solde:");
+		
+		System.out.println("Entrez maintenant les données de votre adresse: ");
+		Integer num_voie= saisieInt("Numero de la voie:");
+		String voie= saisieString("Nom de la voie");
+		String code_postal= saisieString("Code postal");
+		String ville= saisieString("Ville");
 
 		c.setNom(nom);
 		c.setPrenom(prenom);
@@ -244,32 +234,26 @@ public class AppFoot {
 		c.getAdresse().setCode_postal(code_postal);
 		c.getAdresse().setVille(ville);
 
-
-
 		Context.getInstance().getDaoCompte().modifier(c);
-
-
-
 	}
 
 	private static void supprimerCompte() {
-		afficherCompte();	
+		afficherComptes();	
 		int choix=saisieInt("Choisir un compte");
-
 
 		Context.getInstance().getDaoCompte().supprimer(choix);
 
-		System.out.println("Compte supprimer!!");
+		System.out.println("Le compte a été supprimé !!");
 
 	}
 
 	//Manipulation Evenement
 	private static void editerEvenemets(Compte connected) {
-		System.out.println("1 - Afficher Evenemets");
-		System.out.println("2 - Ajouter un Evenemet");
-		System.out.println("3 - Modifier Evenemets");
-		System.out.println("4 - Supprimer Evenemets");
-		System.out.println("5 - Return");
+		System.out.println("1 - Afficher les evenements");
+		System.out.println("2 - Ajouter un evenement");
+		System.out.println("3 - Modifier un evenement");
+		System.out.println("4 - Supprimer un evenement");
+		System.out.println("5 - Retour");
 		int choix = saisieInt("");
 		switch(choix) 
 		{
@@ -286,13 +270,13 @@ public class AppFoot {
 	}
 
 	private static void ajouterEvenemets(Compte connected) {
-		System.out.println("Creer Evenement ");
+		System.out.println("Créer Evenement ");
 
-		String d= saisieString("Date");
+		String d= saisieString("Entrez la date de l'evenement");
 		LocalDate date = LocalDate.parse(d);
 
-		String titre= saisieString("Titre");
-		String description= saisieString("Description");
+		String titre= saisieString("Entrez un titre");
+		String description= saisieString("Entrez une description de l'evenement");
 
 
 		Evenement ev = new Evenement(date, titre, description);
@@ -300,7 +284,7 @@ public class AppFoot {
 
 		Context.getInstance().getDaoEvenement().ajouter(ev);
 
-		System.out.println("Evenement cree!");
+		System.out.println("L'evenement a été crée!");
 		menuAdmin(connected);	
 	}
 
@@ -310,20 +294,17 @@ public class AppFoot {
 
 		Evenement ev = Context.getInstance().getDaoEvenement().selectById(choix);	
 
-		String d= saisieString("Date");
+		String d= saisieString("Entrez la date de l'evenement");
 		LocalDate date = LocalDate.parse(d);
 
-		String titre= saisieString("Titre");
-		String description= saisieString("Description");
+		String titre= saisieString("Entrez un titre");
+		String description= saisieString("Entrez une description de l'evenement");
 
 		ev.setDate(date);
 		ev.setTitre(titre);
 		ev.setDescription(description);
 
 		Context.getInstance().getDaoEvenement().modifier(ev);
-
-
-
 	}
 
 	private static void supprimerEvenemets() {
@@ -333,17 +314,17 @@ public class AppFoot {
 
 		Context.getInstance().getDaoEvenement().supprimer(choix);
 
-		System.out.println("Evenement supprimer!!");
+		System.out.println("L'evenement a été supprimé !!");
 
 	}
 
 	//Manipulation Articles
 	private static void editerArticles(Compte connected) {
-		System.out.println("1 - Afficher Articles");
-		System.out.println("2 - Ajouter un nouveau Article");
-		System.out.println("3 - Modifier Articles");
-		System.out.println("4 - Supprimer Articles");
-		System.out.println("5 - Return");
+		System.out.println("1 - Afficher les articles");
+		System.out.println("2 - Ajouter un nouvel article");
+		System.out.println("3 - Modifier un article");
+		System.out.println("4 - Supprimer un article");
+		System.out.println("5 - Retour");
 		int choix = saisieInt("");
 		switch(choix) 
 		{
@@ -504,7 +485,7 @@ public class AppFoot {
 		System.out.println("3 - Consulter Paries");
 		System.out.println("4 - Consulter Tickets");
 		System.out.println("5 - Consulter Panier");
-		System.out.println("6 - Exit AppFoot");
+		System.out.println("6 - Deconnexion");
 
 		int choix = saisieInt("");
 		switch(choix) 
@@ -514,7 +495,7 @@ public class AppFoot {
 		case 3:consulterParies(connected);break;
 		case 4:afficherTickets();break;
 		case 5:consulterPanier();break;
-		case 6:System.exit(0);break;
+		case 6:menuPrincipal();;break;
 		default: menuClient(connected); break;
 		}
 

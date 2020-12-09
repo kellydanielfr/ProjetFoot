@@ -2,6 +2,9 @@ package Config;
 
 import java.util.*;
 
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 import dao.*;
 import dao.jdbc.*;
 import model.*;
@@ -13,6 +16,8 @@ public class Context {
 	private IDAOCompte daoCompte = new DAOCompteJDBC();
 	private IDAOTicket daoTicket = new DAOTicketJDBC();
 	private IDAOEvenement daoEvenement = new DAOEvenementJDBC();
+	
+//	private EntityManagerFactory emf = Persistence.createEntityManagerFactory("sitefoot");
 	
 	private Context() {}
 	
@@ -86,4 +91,13 @@ public class Context {
 	public void setDaoEvenement(IDAOEvenement daoEvenement) {
 		this.daoEvenement = daoEvenement;
 	}	
+	
+//	public EntityManagerFactory getEmf() {
+//		return emf;
+//	}
+//	
+//	public void closeEmf() 
+//	{
+//		emf.close();
+//	}
 }
