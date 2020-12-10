@@ -1,6 +1,8 @@
 package test;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 import Config.Context;
@@ -8,6 +10,7 @@ import model.*;
 
 public class AppFoot {
 	private static Panier panier = new Panier();
+	private static Compte connected =null;
 	
 	public static int saisieInt(String msg) 
 	{
@@ -125,20 +128,28 @@ public class AppFoot {
 			System.out.println(article);
 			String choix_article = saisieString("Voulez-vous ajouter l'article au panier ?");
 			if (choix_article.equals("Y")) {
-				//TODO: Voir si assez d'article dispo
-				Integer qte = saisieInt("Ajoutez votre quantite");
-				panier.ajouterPanier(article,qte);
+				boolean error =false;
+				do{
+					try {
+						Integer qte = saisieInt("Entrez votre quantite");
+						panier.ajouterPanier(article,qte);error=false;
+					} catch (qteInsiffisante e) {
+						System.out.println(e.getMessage());error=true;
+					}
+				}while(error);
 			}
 		}
 	}
 
 	private static void consulterPanier() {
 		System.out.println(panier.getPanier());
+		System.out.println("Total: "+ panier.totalPanier());
 		
 		System.out.println("Voulez-vous:");
 		System.out.println("1 - Editer le panier");
 		System.out.println("2 - Payer");
 		System.out.println("3 - Continuer vos achats");
+		
 		
 		int choix = saisieInt("");
 		switch(choix) 
@@ -175,8 +186,19 @@ public class AppFoot {
 	}
 
 	private static void payer() {
-		// TODO Auto-generated method stub
+		System.out.println("Comment voulez-vous payer vos achats ?");
+		System.out.println("1 - Carte");
+		System.out.println("2 - Solde");
+		System.out.println("3 - Abandonner");
 		
+		int choix = saisieInt("");
+		switch(choix) 
+		{
+		case 1:panier.payerCarte();break;
+		//case 2:payerSolde();break;
+		case 3:consulterPanier();break;
+		default: payer(); break;
+		}
 	}
 	
 	//Connection
@@ -234,7 +256,11 @@ public class AppFoot {
 		switch(choix) 
 		{
 		case 1:afficherComptes();break;
-		case 2:modifierCompte();break;
+		case 2:
+			afficherComptes();
+			int choix_compte=saisieInt("Choisir un compte:");
+			Compte c = Context.getInstance().getDaoCompte().selectById(choix_compte);
+			modifierCompte(c);break;
 		case 3:supprimerCompte();break;
 		case 4:menuAdmin(connected);break;
 		default: editerCompte(connected); break;
@@ -251,39 +277,40 @@ public class AppFoot {
 		}	
 	}
 
-	private static void modifierCompte() {
-		afficherComptes();
+	private static void modifierCompte(Compte c) {
 
-		int choix=saisieInt("Choisir un compte");
-
-		Adherent c = (Adherent) Context.getInstance().getDaoCompte().selectById(choix);
-
+		String old_login = c.getLogin();
+		
 		String login = null;
 		do {
 			login= saisieString("Entrez le login:");
-		} while (Context.get_instance().getDaoCompte().SelectByLogin(login) != null);
+		} while (Context.get_instance().getDaoCompte().SelectByLogin(login) != null && !login.equals(old_login));
 		
 		String nom= saisieString("Entrez le nom:");
 		String prenom= saisieString("Entrez le prenom:");
-
 		String password= saisieString("Entrez le password:");
-		double solde= saisieDouble("Entrez le solde:");
-		
-		System.out.println("Entrez maintenant les données de votre adresse: ");
-		Integer num_voie= saisieInt("Numero de la voie:");
-		String voie= saisieString("Nom de la voie");
-		String code_postal= saisieString("Code postal");
-		String ville= saisieString("Ville");
-
 		c.setNom(nom);
 		c.setPrenom(prenom);
 		c.setLogin(login);
 		c.setPassword(password);
-		c.setSolde(solde);
-		c.getAdresse().setNum_voie(num_voie);
-		c.getAdresse().setVoie(voie);
-		c.getAdresse().setCode_postal(code_postal);
-		c.getAdresse().setVille(ville);
+		
+		if ( c instanceof Adherent) {
+			
+			double solde= saisieDouble("Entrez le solde:");
+			
+			System.out.println("Entrez maintenant les données de votre adresse: ");
+			Integer num_voie= saisieInt("Numero de la voie:");
+			String voie= saisieString("Nom de la voie");
+			String code_postal= saisieString("Code postal");
+			String ville= saisieString("Ville");
+
+
+			((Adherent) c).setSolde(solde);
+			((Adherent) c).getAdresse().setNum_voie(num_voie);
+			((Adherent) c).getAdresse().setVoie(voie);
+			((Adherent) c).getAdresse().setCode_postal(code_postal);
+			((Adherent) c).getAdresse().setVille(ville);
+		}	
 
 		Context.getInstance().getDaoCompte().modifier(c);
 	}
@@ -340,7 +367,7 @@ public class AppFoot {
 	}
 
 	private static void modifierEvenemets() {
-
+		consulterEvenemets();
 		int choix=saisieInt("Choisir un evenement");
 
 		Evenement ev = Context.getInstance().getDaoEvenement().selectById(choix);	
@@ -416,7 +443,10 @@ public class AppFoot {
 	}
 
 	private static void modifierArticles() {
+		afficherArticles();
+		
 		int choix=saisieInt("Choisir un article");
+		
 
 		Article a = Context.getInstance().getDaoArticle().selectById(choix);	
 
@@ -495,20 +525,21 @@ public class AppFoot {
 	}
 
 	private static void modifierTickets() {
-		int choix=saisieInt("Choisir un evenement");
+		afficherTickets();
+		int choix=saisieInt("Choisir un ticket");
 
 		Ticket t = Context.getInstance().getDaoTicket().selectById(choix);	
+		System.out.println(t);
 
 		double prix = saisieDouble("Modifier le prix");
 		Integer quantite = saisieInt("Modifier la quantite");
-
 		String d= saisieString("Modifier la date");
 		LocalDate date = LocalDate.parse(d);
-
 		String lieu= saisieString("Modifier le lieu");
 
-		t.setPrix(prix);
+		
 		t.setQuantite(quantite);
+		t.setPrix(prix);
 		t.setDate(date);
 		t.setLieu(lieu);
 
@@ -544,9 +575,9 @@ public class AppFoot {
 		case 1:consulterEvenemets();break;
 		case 2:consulterArticles();break;
 		case 3:consulterParies(connected);break;
-		case 4:afficherTickets();break;
+		case 4:consulterTickets();break;
 		case 5:consulterPanier();break;
-		//TODO:case 6:modifCompte();break;
+		case 6:modifierCompte(connected);break;
 		case 7:menuPrincipal();;break;
 		default: menuAdherent(connected); break;
 		}
@@ -554,6 +585,29 @@ public class AppFoot {
 		menuAdherent(connected);
 	}
 
+
+	private static void consulterTickets() {
+		afficherTickets();
+		
+		String choix = saisieString("Voulez-vous choisir un ticket ?");
+		if(choix.equals("Y")) {
+			int num_ticket = saisieInt("Entrez le numero du ticket");
+			Ticket ticket = Context.getInstance().getDaoTicket().selectById(num_ticket);
+			System.out.println(ticket);
+			String choix_ticket = saisieString("Voulez-vous ajouter le ticket au panier ?");
+			if (choix_ticket.equals("Y")) {
+				boolean error =false;
+				do{
+					try {
+						Integer qte = saisieInt("Entrez votre quantite");
+						panier.ajouterPanier(ticket,qte);error=false;
+					} catch (qteInsiffisante e) {
+						System.out.println(e.getMessage());error=true;
+					}
+				}while(error);
+			}
+		}
+	}
 
 	//Paries
 	private static void consulterParies(Adherent connected) {
@@ -583,6 +637,7 @@ public class AppFoot {
 	}
 
 	public static void main(String[] args) {
+		
 		menuPrincipal();
 	}
 }

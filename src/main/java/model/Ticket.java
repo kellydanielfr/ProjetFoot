@@ -2,6 +2,7 @@ package model;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 
@@ -9,6 +10,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 public class Ticket extends Produit{
 	
 	@PrimaryKeyJoinColumn(name="code_ticket",referencedColumnName="id")
+	@Column(columnDefinition = "DATE")
 	private LocalDate date;
 	private String lieu;
 	
@@ -45,7 +47,7 @@ public class Ticket extends Produit{
 
 	@Override
 	public String toString() {
-		return "Ticket [date=" + date + ", lieu=" + lieu + ", prix=" + prix
+		return "Ticket [num_produit = " + num_produit + " date=" + date + ", lieu=" + lieu + ", prix=" + prix
 				+ ", quantite=" + quantite + "]";
 	}
 

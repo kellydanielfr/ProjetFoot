@@ -90,7 +90,7 @@ public class Adherent extends Compte implements UserFunctions{
 
 	
 	public String toString() {
-		return "Adherent [solde=" + solde + ",  adresse=" + adresse + ", nom=" + nom + ", prenom="
+		return "Adherent [num_compte = " + num_compte + " solde=" + solde + ",  adresse=" + adresse + ", nom=" + nom + ", prenom="
 				+ prenom + ", num_compte=" + num_compte + ", login=" + login + ", password=" + password + "]";
 	}
 	

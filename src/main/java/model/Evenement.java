@@ -10,6 +10,7 @@ public class Evenement {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id_evenement;
+	@Column(columnDefinition = "DATE")
 	private LocalDate date;
 	private String titre;
 	private String description;
@@ -64,7 +65,7 @@ public class Evenement {
 	}
 	@Override
 	public String toString() {
-		return "Evenement [date=" + date + ", titre=" + titre + ", description=" + description + "]";
+		return "Evenement [id_evenement = " + id_evenement + " date=" + date + ", titre=" + titre + ", description=" + description + "]";
 	}
 	
 	

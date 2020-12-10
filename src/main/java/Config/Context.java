@@ -6,10 +6,12 @@ import javax.persistence.Persistence;
 import dao.IDAOArticle;
 import dao.IDAOCompte;
 import dao.IDAOEvenement;
+import dao.IDAOProduit;
 import dao.IDAOTicket;
 import dao.jpa.DAOArticleJPA;
 import dao.jpa.DAOCompteJPA;
 import dao.jpa.DAOEvenementJPA;
+import dao.jpa.DAOProduitJPA;
 import dao.jpa.DAOTicketJPA;
 
 
@@ -22,6 +24,7 @@ public class Context {
 	private IDAOCompte daoCompte= new DAOCompteJPA();
 	private IDAOEvenement daoEvenement= new DAOEvenementJPA();
 	private IDAOTicket daoTicket= new DAOTicketJPA();
+	private IDAOProduit daoProduit= new DAOProduitJPA();
 
 
 
@@ -107,5 +110,17 @@ public class Context {
 	public void closeEmf() 
 	{
 		emf.close();
+	}
+
+
+
+	public IDAOProduit getDaoProduit() {
+		return daoProduit;
+	}
+
+
+
+	public void setDaoProduit(IDAOProduit daoProduit) {
+		this.daoProduit = daoProduit;
 	}
 }

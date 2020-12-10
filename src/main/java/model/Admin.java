@@ -20,7 +20,7 @@ public class Admin extends Compte{
 
 	@Override
 	public String toString() {
-		return "Admin [nom=" + nom + ", prenom=" + prenom + ", num_compte=" + num_compte
+		return "Admin [num_compte = " + num_compte + " nom=" + nom + ", prenom=" + prenom + ", num_compte=" + num_compte
 				+ ", login=" + login + ", password=" + password + "]";
 	}
 

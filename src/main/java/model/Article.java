@@ -56,7 +56,7 @@ public class Article extends Produit{
 
 	@Override
 	public String toString() {
-		return "Article [nom=" + nom + ", taille=" + taille + ", description="
+		return "Article [num_produit = " + num_produit + " nom=" + nom + ", taille=" + taille + ", description="
 				+ description + ", prix=" + prix + ", quantite=" + quantite + "]";
 	}
 
