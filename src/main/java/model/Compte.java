@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="TYPE_COMPTE")
+@DiscriminatorColumn(name="droit")
 public abstract class Compte {
 	
 	@Id
@@ -12,6 +12,7 @@ public abstract class Compte {
 	protected Integer num_compte;
 	protected String nom;
 	protected String prenom;
+	@Column(unique = true)
 	protected String login;
 	protected String password;
 

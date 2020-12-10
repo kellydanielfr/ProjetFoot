@@ -84,7 +84,7 @@ public class DAOCompteJPA implements IDAOCompte {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 		
 		
-		Query maRequete = em.createQuery("from Compte c  where c.login=:loginReq and c.password=:password ",Admin.class);
+		Query maRequete = em.createQuery("from Compte c  where c.login=:loginReq and c.password=:password ",Compte.class);
 		maRequete.setParameter("loginReq",login);
 		maRequete.setParameter("password",mdp);
 		Compte c = (Compte) maRequete.getSingleResult();
@@ -96,10 +96,12 @@ public class DAOCompteJPA implements IDAOCompte {
 	public Compte SelectByLogin(String login) {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 		
-		
-		Query maRequete = em.createQuery("from Compte c  where c.login=:loginReq",Admin.class);
+		Compte c =null;
+		Query maRequete = em.createQuery("from Compte c where c.login=:loginReq",Compte.class);
 		maRequete.setParameter("loginReq",login);
-		Compte c = (Compte) maRequete.getSingleResult();
+		try {
+			c = (Compte) maRequete.getSingleResult();
+		} catch (Exception e) {}
 		return c;
 	}
 

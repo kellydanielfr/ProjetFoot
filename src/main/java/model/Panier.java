@@ -1,6 +1,5 @@
 package model;
 
-import java.util.List;
 import java.util.Map;
 
 import Config.Context;
@@ -8,8 +7,6 @@ import Config.Context;
 public class Panier {
 	
 	private Map<Produit, Integer> panier;
-	private double total=0;
-	
 	
 	public Panier() {}
 
@@ -17,8 +14,8 @@ public class Panier {
 		panier.put(article,qte);
 	}
 	
-	public static void totalPanier() {
-		
+	public double totalPanier() {
+		return 0;
 	}
 	
 	public void supprimerProduit(Integer num_article) {
@@ -31,7 +28,7 @@ public class Panier {
 		panier.put(article,qte);
 	}
 	
-	public static void showPanier() {
+	public void showPanier() {
 		
 	}
 
@@ -42,14 +39,4 @@ public class Panier {
 	public void setPanier(Map<Produit,Integer> panier) {
 		this.panier = panier;
 	}
-
-	public double getTotal() {
-		return total;
-	}
-
-	public void setTotal(double total) {
-		this.total = total;
-	}
-	
-	
 }
