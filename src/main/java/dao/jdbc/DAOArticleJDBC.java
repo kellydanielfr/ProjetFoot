@@ -45,7 +45,7 @@ public class DAOArticleJDBC implements IDAOArticle{
 			ps.setDouble(3, a.getPrix());
 			ps.setInt(4, a.getQuantite());
 			ps.setString(5, a.getDescription());
-			ps.setInt(6, a.getCode_article());
+			ps.setInt(6, a.getNum_produit());
 			
 			ps.executeUpdate();
 			ps.close();
@@ -85,7 +85,7 @@ public class DAOArticleJDBC implements IDAOArticle{
 			
 			while(rs.next()) 
 	        {
-				article = new Article(rs.getInt("code_article"), rs.getString("nom"), rs.getDouble("prix"), rs.getInt("quantite"), rs.getString("taille"), rs.getString("description"));
+				article = new Article(rs.getInt("num_produit"), rs.getString("nom"), rs.getDouble("prix"), rs.getInt("quantite"), rs.getString("taille"), rs.getString("description"));
 	        }
 			
 					

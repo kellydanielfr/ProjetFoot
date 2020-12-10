@@ -2,17 +2,15 @@ package model;
 
 import java.time.LocalDate;
 
+import javax.persistence.Entity;
+import javax.persistence.PrimaryKeyJoinColumn;
+
+@Entity
 public class Ticket extends Produit{
-	private Integer code_ticket;
+	
+	@PrimaryKeyJoinColumn(name="code_ticket",referencedColumnName="id")
 	private LocalDate date;
 	private String lieu;
-	
-	public Ticket(Integer code_ticket, double prix, Integer quantite, LocalDate date, String lieu) {
-		super(prix, quantite);
-		this.code_ticket=code_ticket;
-		this.date = date;
-		this.lieu = lieu;
-	}
 	
 	public Ticket(double prix, Integer quantite, LocalDate date, String lieu) {
 		super(prix, quantite);
@@ -20,13 +18,14 @@ public class Ticket extends Produit{
 		this.lieu = lieu;
 	}
 
-	public Integer getCode_ticket() {
-		return code_ticket;
+	public Ticket(Integer num_produit, double prix, Integer quantite, LocalDate date, String lieu) {
+		super(num_produit, prix, quantite);
+		this.date = date;
+		this.lieu = lieu;
 	}
 
-	public void setCode_ticket(Integer code_ticket) {
-		this.code_ticket = code_ticket;
-	}
+	public Ticket() {}
+
 
 	public LocalDate getDate() {
 		return date;
@@ -46,7 +45,7 @@ public class Ticket extends Produit{
 
 	@Override
 	public String toString() {
-		return "Ticket [code_ticket=" + code_ticket + ", date=" + date + ", lieu=" + lieu + ", prix=" + prix
+		return "Ticket [date=" + date + ", lieu=" + lieu + ", prix=" + prix
 				+ ", quantite=" + quantite + "]";
 	}
 

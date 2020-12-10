@@ -3,6 +3,8 @@ package model;
 import java.util.List;
 import java.util.Map;
 
+import Config.Context;
+
 public class Panier {
 	
 	private Map<Produit, Integer> panier;
@@ -19,12 +21,14 @@ public class Panier {
 		
 	}
 	
-	public static void supprimerProduit() {
-		
+	public void supprimerProduit(Integer num_article) {
+		Article article = Context.getInstance().getDaoArticle().selectById(num_article);
+		panier.remove(article);
 	}
 	
-	public static void miseAJourQteProduit() {
-		
+	public void miseAJourQteProduit(Integer num_article, int qte) {
+		Article article = Context.getInstance().getDaoArticle().selectById(num_article);
+		panier.put(article,qte);
 	}
 	
 	public static void showPanier() {

@@ -125,6 +125,7 @@ public class AppFoot {
 			System.out.println(article);
 			String choix_article = saisieString("Voulez-vous ajouter l'article au panier ?");
 			if (choix_article.equals("Y")) {
+				//TODO: Voir si assez d'article dispo
 				Integer qte = saisieInt("Ajoutez votre quantite");
 				panier.ajouterPanier(article,qte);
 			}
@@ -150,15 +151,27 @@ public class AppFoot {
 		
 		consulterPanier();
 		
-		//TODO: function editerPanier
 		//TODO: Fonction Payment
 	}
 
 	private static void editPanier() {
 		System.out.println(panier.getPanier());
 		
-		int choix = saisieInt("Choisir l'article à modifier:");
+		Integer num_article = saisieInt("Choisir l'article à modifier:");
 		
+		System.out.println("Que voulez-vous faire:");
+		System.out.println("1 - Changer la quantite");
+		System.out.println("2 - Supprimer l'article");
+		System.out.println("3 - Abandonner");
+		
+		int choix = saisieInt("");
+		switch(choix) 
+		{
+		case 1:int qte = saisieInt("Entrez la qte"); panier.miseAJourQteProduit(num_article,qte);break;
+		case 2:panier.supprimerProduit(num_article);break;
+		case 3:consulterArticles();break;
+		default: editPanier(); break;
+		}
 	}
 
 	private static void payer() {

@@ -46,7 +46,7 @@ public class DAOTicketJDBC implements IDAOTicket{
 			ps.setString(2, t.getLieu());
 			ps.setInt(3, t.getQuantite());
 			ps.setDouble(4, t.getPrix());
-			ps.setInt(5, t.getCode_ticket());
+			ps.setInt(5, t.getNum_produit());
 			
 			ps.executeUpdate();
 			ps.close();

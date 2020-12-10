@@ -22,22 +22,20 @@ public class DAOCompteJDBC implements IDAOCompte {
 			Connection conn=DriverManager.getConnection(lien+database, login, password);
 			PreparedStatement ps=null;
 			if (c instanceof Admin) {
-				ps=conn.prepareStatement("Insert into compte (login,nom,prenom,password,droit) values (?,?,?,?,?)");
+				ps=conn.prepareStatement("Insert into compte (login,nom,prenom,password) values (?,?,?,?)");
 				ps.setString(1, c.getLogin());
 				ps.setString(2, c.getNom());
 				ps.setString(3, c.getPrenom());
 				ps.setString(4, c.getPassword());
-				ps.setString(5, ((Admin) c).getDroit());
 				
 			} else {
 				int lastInsertId=0;
-				ps=conn.prepareStatement("Insert into compte (login,nom,prenom,password,solde,droit) values (?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+				ps=conn.prepareStatement("Insert into compte (login,nom,prenom,password,solde) values (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 				ps.setString(1, c.getLogin());
 				ps.setString(2, c.getNom());
 				ps.setString(3, c.getPrenom());
 				ps.setString(4, c.getPassword());
 				ps.setDouble(5, ((Adherent) c).getSolde());
-				ps.setString(6, ((Adherent) c).getDroit());
 				ps.executeUpdate();
 				
 				ResultSet rs = ps.getGeneratedKeys();
@@ -75,14 +73,12 @@ public class DAOCompteJDBC implements IDAOCompte {
 			PreparedStatement ps=null;
 			PreparedStatement ps2=null;
 			if (c instanceof Admin) {
-				ps=conn.prepareStatement("UPDATE compte set login=?,nom=?, prenom=?,password=?,droit=? where num_compte=?");
-				ps.setString(5, ((Admin) c).getDroit());
-				ps.setInt(6, c.getNum_compte());
+				ps=conn.prepareStatement("UPDATE compte set login=?,nom=?, prenom=?,password=? where num_compte=?");
+				ps.setInt(5, c.getNum_compte());
 			} else {
-				ps=conn.prepareStatement("UPDATE compte set login=?,nom=?, prenom=?,password=?,solde=?,droit=? where num_compte=?");
+				ps=conn.prepareStatement("UPDATE compte set login=?,nom=?, prenom=?,password=?,solde=? where num_compte=?");
 				ps.setDouble(5, ((Adherent) c).getSolde());
-				ps.setString(6, ((Adherent) c).getDroit());
-				ps.setInt(7, c.getNum_compte());
+				ps.setInt(6, c.getNum_compte());
 				ps2=conn.prepareStatement("UPDATE adresse set num_voie=?,voie=?,code_postal=?, ville=? where num_compte=?");
 				ps2.setInt(1, ((Adherent) c).getAdresse().getNum_voie());
 				ps2.setString(2, ((Adherent) c).getAdresse().getVoie());

@@ -2,7 +2,13 @@ package model;
 
 import java.time.LocalDate;
 
+import javax.persistence.*;
+
+@Entity
 public class Evenement {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id_evenement;
 	private LocalDate date;
 	private String titre;
@@ -15,6 +21,12 @@ public class Evenement {
 		this.description = description;
 	}
 	
+	
+	public Evenement() {
+		super();
+	}
+
+
 	public Evenement(LocalDate date, String titre, String description) {
 		this.date = date;
 		this.titre = titre;

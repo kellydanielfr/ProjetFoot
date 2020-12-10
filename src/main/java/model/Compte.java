@@ -1,11 +1,23 @@
 package model;
 
+import javax.persistence.*;
+
+@Entity
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="TYPE_COMPTE")
 public abstract class Compte {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	protected Integer num_compte;
 	protected String nom;
 	protected String prenom;
-	protected Integer num_compte;
 	protected String login;
 	protected String password;
+
+	
+	public Compte() {
+	}
 
 	public Compte(String nom, String prenom, Integer num_compte, String login, String password) {
 		this.nom = nom;
@@ -69,6 +81,4 @@ public abstract class Compte {
 	public String toString() {
 		return "Compte [num_compte=" + num_compte + ", login=" + login + ", password=" + password + "]";
 	}
-
-	
 }

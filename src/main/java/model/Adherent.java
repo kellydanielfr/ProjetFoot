@@ -1,9 +1,17 @@
 package model;
 
+import javax.persistence.*;
+
+@Entity
+@DiscriminatorValue("ADHERENT")
 public class Adherent extends Compte implements UserFunctions{
+	
 	private double solde;
-	private String droit="ADHERENT";
+	
+	@Embedded
 	private Adresse adresse;
+	
+	public Adherent() {}
 	
 	public Adherent(String nom, String prenom, Integer num_compte, String login, String password, double solde,
 			 Adresse adresse) {
@@ -38,17 +46,6 @@ public class Adherent extends Compte implements UserFunctions{
 	public void setSolde(double solde) {
 		this.solde = solde;
 	}
-
-
-	public String getDroit() {
-		return droit;
-	}
-
-
-	public void setDroit(String droit) {
-		this.droit = droit;
-	}
-
 
 	public static void venteExceptionnelle() {
 		
@@ -93,7 +90,7 @@ public class Adherent extends Compte implements UserFunctions{
 
 	
 	public String toString() {
-		return "Adherent [solde=" + solde + ", droit=" + droit + ", adresse=" + adresse + ", nom=" + nom + ", prenom="
+		return "Adherent [solde=" + solde + ",  adresse=" + adresse + ", nom=" + nom + ", prenom="
 				+ prenom + ", num_compte=" + num_compte + ", login=" + login + ", password=" + password + "]";
 	}
 	
