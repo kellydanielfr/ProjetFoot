@@ -76,6 +76,12 @@ public class Panier {
 	}
 
 	public void payerCarte() {
+		//TODO: APICarte
+		majQte();
+		viderPanier();
+	}
+	
+	public void majQte() {
 		Iterator<Integer> it=panier.keySet().iterator();
 		double total = 0;
 		while(it.hasNext()){
@@ -85,11 +91,20 @@ public class Panier {
 			produit.setQuantite(produit.getQuantite()-qte);
 			Context.getInstance().getDaoProduit().modifier(produit);
 		}
-		viderPanier();
 	}
-	
 	public void viderPanier() {
 		panier =new HashMap<Integer, Integer>();
 	}
-	
+
+	public void payerSolde(Compte connected) {
+		if(((Adherent) connected).getSolde()>=totalPanier()) {
+			((Adherent) connected).setSolde(((Adherent) connected).getSolde()-totalPanier());
+			Context.getInstance().getDaoCompte().modifier(connected);
+			majQte();
+			viderPanier();
+		}else {
+			System.out.println("Solde insufisant ! Redirection vers payement par carte");
+			payerCarte();
+		}
+	}
 }

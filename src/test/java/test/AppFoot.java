@@ -188,14 +188,16 @@ public class AppFoot {
 	private static void payer() {
 		System.out.println("Comment voulez-vous payer vos achats ?");
 		System.out.println("1 - Carte");
-		System.out.println("2 - Solde");
+		if(connected instanceof Adherent) {
+			System.out.println("2 - Solde");
+		}
 		System.out.println("3 - Abandonner");
 		
 		int choix = saisieInt("");
 		switch(choix) 
 		{
 		case 1:panier.payerCarte();break;
-		//case 2:payerSolde();break;
+		case 2:panier.payerSolde(connected);break;
 		case 3:consulterPanier();break;
 		default: payer(); break;
 		}
@@ -207,7 +209,7 @@ public class AppFoot {
 		String login=saisieString("Saisir votre login");
 		String password=saisieString("Saisir votre password");
 
-		Compte connected=Context.getInstance().getDaoCompte().SelectByLoginMdp(login, password); 
+		connected=Context.getInstance().getDaoCompte().SelectByLoginMdp(login, password); 
 
 		if(connected==null) 
 		{
@@ -216,16 +218,16 @@ public class AppFoot {
 		}
 		else if(connected instanceof Admin) 
 		{
-			menuAdmin((Admin) connected);
+			menuAdmin();
 		}
 		else if(connected instanceof Adherent)
 		{
-			menuAdherent((Adherent) connected);
+			menuAdherent();
 		}
 	}
 
 	//Menu Admin
-	private static void menuAdmin(Compte connected) {
+	private static void menuAdmin() {
 		System.out.println("1 - Gestion des comptes");
 		System.out.println("2 - Gestion des evenementes");
 		System.out.println("3 - Gestion des articles");
@@ -235,19 +237,19 @@ public class AppFoot {
 		int choix = saisieInt("");
 		switch(choix) 
 		{
-		case 1:editerCompte(connected);break;
-		case 2:editerEvenemets(connected);break;
-		case 3:editerArticles(connected);break;
-		case 4:editerTickets(connected);break;
+		case 1:editerCompte();break;
+		case 2:editerEvenemets();break;
+		case 3:editerArticles();break;
+		case 4:editerTickets();break;
 		case 5:menuPrincipal();;break;
-		default: menuAdmin(connected); break;
+		default: menuAdmin(); break;
 		}
 
-		menuAdmin(connected);
+		menuAdmin();
 	}
 
 	//Manipulation Comptes
-	private static void editerCompte(Compte connected) {
+	private static void editerCompte() {
 		System.out.println("1 - Afficher les comptes");
 		System.out.println("2 - Modifier un compte");
 		System.out.println("3 - Supprimer un compte");
@@ -262,11 +264,11 @@ public class AppFoot {
 			Compte c = Context.getInstance().getDaoCompte().selectById(choix_compte);
 			modifierCompte(c);break;
 		case 3:supprimerCompte();break;
-		case 4:menuAdmin(connected);break;
-		default: editerCompte(connected); break;
+		case 4:menuAdmin();break;
+		default: editerCompte(); break;
 		}	
 
-		editerCompte(connected);
+		editerCompte();
 	}
 
 	private static void afficherComptes() {
@@ -326,7 +328,7 @@ public class AppFoot {
 	}
 
 	//Manipulation Evenement
-	private static void editerEvenemets(Compte connected) {
+	private static void editerEvenemets() {
 		System.out.println("1 - Afficher les evenements");
 		System.out.println("2 - Ajouter un evenement");
 		System.out.println("3 - Modifier un evenement");
@@ -336,18 +338,18 @@ public class AppFoot {
 		switch(choix) 
 		{
 		case 1:consulterEvenemets();break;
-		case 2:ajouterEvenemets(connected);break;
+		case 2:ajouterEvenemets();break;
 		case 3:modifierEvenemets();break;
 		case 4:supprimerEvenemets();break;
-		case 5:menuAdmin(connected);break;
+		case 5:menuAdmin();break;
 
-		default: editerEvenemets(connected); break;
+		default: editerEvenemets(); break;
 		}		
 
-		editerEvenemets(connected);
+		editerEvenemets();
 	}
 
-	private static void ajouterEvenemets(Compte connected) {
+	private static void ajouterEvenemets() {
 		System.out.println("Créer Evenement ");
 
 		String d= saisieString("Entrez la date de l'evenement");
@@ -363,7 +365,7 @@ public class AppFoot {
 		Context.getInstance().getDaoEvenement().ajouter(ev);
 
 		System.out.println("L'evenement a été crée!");
-		menuAdmin(connected);	
+		menuAdmin();	
 	}
 
 	private static void modifierEvenemets() {
@@ -397,7 +399,7 @@ public class AppFoot {
 	}
 
 	//Manipulation Articles
-	private static void editerArticles(Compte connected) {
+	private static void editerArticles() {
 		System.out.println("1 - Afficher les articles");
 		System.out.println("2 - Ajouter un nouvel article");
 		System.out.println("3 - Modifier un article");
@@ -407,14 +409,14 @@ public class AppFoot {
 		switch(choix) 
 		{
 		case 1:afficherArticles();break;
-		case 2:ajouterArticles(connected);break;
+		case 2:ajouterArticles();break;
 		case 3:modifierArticles();break;
 		case 4:supprimerArticles();break;
-		case 5:menuAdmin(connected);break;
+		case 5:menuAdmin();break;
 
-		default: editerArticles(connected); break;
+		default: editerArticles(); break;
 		}			
-		editerArticles(connected);
+		editerArticles();
 	}
 
 	private static void afficherArticles() {
@@ -425,7 +427,7 @@ public class AppFoot {
 		}	
 	}	
 
-	private static void ajouterArticles(Compte connected) {
+	private static void ajouterArticles() {
 		System.out.println("Creer un article ");
 
 		String nom= saisieString("Entrez le nom");
@@ -439,7 +441,7 @@ public class AppFoot {
 		Context.getInstance().getDaoArticle().ajouter(a);
 
 		System.out.println("L'article a été crée!");
-		menuAdmin(connected);	
+		menuAdmin();	
 	}
 
 	private static void modifierArticles() {
@@ -476,7 +478,7 @@ public class AppFoot {
 	}
 
 	//Manipulation tickets
-	private static void editerTickets(Compte connected) {
+	private static void editerTickets() {
 		System.out.println("1 - Afficher les tickets");
 		System.out.println("2 - Ajouter des tickets");
 		System.out.println("3 - Modifier des tickets");
@@ -486,12 +488,12 @@ public class AppFoot {
 		switch(choix) 
 		{
 		case 1:afficherTickets();break;
-		case 2:ajouterTickets(connected);break;
+		case 2:ajouterTickets();break;
 		case 3:modifierTickets();break;
 		case 4:supprimerTickets();break;
-		case 5:menuAdmin(connected);break;
+		case 5:menuAdmin();break;
 
-		default: editerTickets(connected); break;	
+		default: editerTickets(); break;	
 		}
 	}
 
@@ -503,7 +505,7 @@ public class AppFoot {
 		}	
 	}
 
-	private static void ajouterTickets(Compte connected) {
+	private static void ajouterTickets() {
 		System.out.println("Creer des tickets ");
 
 		double prix = saisieDouble("Entrez le prix");
@@ -521,7 +523,7 @@ public class AppFoot {
 		Context.getInstance().getDaoTicket().ajouter(t);
 
 		System.out.println("Les tickets ont été crées!");
-		menuAdmin(connected);		
+		menuAdmin();		
 	}
 
 	private static void modifierTickets() {
@@ -558,7 +560,7 @@ public class AppFoot {
 	}
 
 	//Menu Client
-	private static void menuAdherent(Adherent connected) {
+	private static void menuAdherent() {
 
 		System.out.println("Choisir un menu :");
 		System.out.println("1 - Consulter les evenements");
@@ -567,6 +569,7 @@ public class AppFoot {
 		System.out.println("4 - Consulter les tickets");
 		System.out.println("5 - Consulter mon panier");
 		System.out.println("6 - Modifier mon compte");
+		//TODO:afficher solde et crediter
 		System.out.println("7 - Deconnexion");
 
 		int choix = saisieInt("");
@@ -574,15 +577,15 @@ public class AppFoot {
 		{
 		case 1:consulterEvenemets();break;
 		case 2:consulterArticles();break;
-		case 3:consulterParies(connected);break;
+		case 3:consulterParies();break;
 		case 4:consulterTickets();break;
 		case 5:consulterPanier();break;
 		case 6:modifierCompte(connected);break;
 		case 7:menuPrincipal();;break;
-		default: menuAdherent(connected); break;
+		default: menuAdherent(); break;
 		}
 
-		menuAdherent(connected);
+		menuAdherent();
 	}
 
 
@@ -610,7 +613,7 @@ public class AppFoot {
 	}
 
 	//Paries
-	private static void consulterParies(Adherent connected) {
+	private static void consulterParies() {
 		afficherParie();
 
 		System.out.println("Voulez vous prendre un pari? [Y/N]");
@@ -619,8 +622,8 @@ public class AppFoot {
 		switch(choix) 
 		{
 		case "Y":prisePari();break;
-		case "N":menuAdherent(connected);break;
-		default : consulterParies(connected);break;
+		case "N":menuAdherent();break;
+		default : consulterParies();break;
 		}
 
 		//TODO:function prise de parie
