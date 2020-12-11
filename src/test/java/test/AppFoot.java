@@ -76,14 +76,10 @@ public class AppFoot {
 		String code_postal= saisieString("Code postal");
 		String ville= saisieString("Ville");
 
-		Adresse adresse = new Adresse(num_voie, voie, code_postal,ville);
-
-		Context.getInstance().getDaoCompte().ajouter(new Adherent(nom, prenom, login, password, solde, adresse));
+		Compte.creatAdherent(num_voie, voie, code_postal,ville,nom, prenom, login, password, solde);
 
 		System.out.println("Votre compte a été crée!");
 	}
-
-
 
 	//Menus visiteurs
 	private static void visiteur() {
@@ -96,7 +92,7 @@ public class AppFoot {
 		int choix = saisieInt("");
 		switch(choix) 
 		{
-		case 1:consulterEvenemets();break;
+		case 1:Evenement.showAllEvenement();break;
 		case 2:consulterArticles();break;
 		case 3:consulterPanier();break;
 		case 4:menuPrincipal();break;
@@ -106,44 +102,30 @@ public class AppFoot {
 		visiteur();
 	}
 
-	private static void consulterEvenemets() {
-		System.out.println("\nListe des Evenement : \n");
-		for(Evenement e : Context.getInstance().getDaoEvenement().selectAll()) 
-		{
-			System.out.println(e);
-		}	
-	}
-
 	private static void consulterArticles() {
-		System.out.println("\nListe des Articles : \n");
-		for(Article a : Context.getInstance().getDaoArticle().selectAll()) 
-		{
-			System.out.println(a);
-		}
+		Article.showAllArticle();
 		
-		String choix = saisieString("Voulez-vous choisir un article ?");
+		
+		String choix = saisieString("Voulez-vous effectuer un achat ?");
 		if(choix.equals("Y")) {
 			int num_article = saisieInt("Entrez le numero de l'article");
 			Article article = Context.getInstance().getDaoArticle().selectById(num_article);
-			System.out.println(article);
-			String choix_article = saisieString("Voulez-vous ajouter l'article au panier ?");
-			if (choix_article.equals("Y")) {
-				boolean error =false;
-				do{
-					try {
-						Integer qte = saisieInt("Entrez votre quantite");
-						panier.ajouterPanier(article,qte);error=false;
-					} catch (qteInsiffisante e) {
-						System.out.println(e.getMessage());error=true;
-					}
-				}while(error);
-			}
+			boolean error =false;
+			do{
+				try {
+					Integer qte = saisieInt("Entrez votre quantite");
+					panier.ajouterPanier(article,qte);error=false;
+				} catch (qteInsiffisante e) {
+					System.out.println(e.getMessage());error=true;
+				}
+			}while(error);
 		}
 	}
 
 	private static void consulterPanier() {
-		System.out.println(panier.getPanier());
-		System.out.println("Total: "+ panier.totalPanier());
+		
+		Panier.showPanier(panier);
+		
 		
 		System.out.println("Voulez-vous:");
 		System.out.println("1 - Editer le panier");
@@ -161,12 +143,10 @@ public class AppFoot {
 		}
 		
 		consulterPanier();
-		
-		//TODO: Fonction Payment
 	}
 
 	private static void editPanier() {
-		System.out.println(panier.getPanier());
+		Panier.showPanier(panier);
 		
 		Integer num_article = saisieInt("Choisir l'article à modifier:");
 		
@@ -257,9 +237,9 @@ public class AppFoot {
 		int choix = saisieInt("");
 		switch(choix) 
 		{
-		case 1:afficherComptes();break;
+		case 1:Compte.showAllCompte();break;
 		case 2:
-			afficherComptes();
+			Compte.showAllCompte();
 			int choix_compte=saisieInt("Choisir un compte:");
 			Compte c = Context.getInstance().getDaoCompte().selectById(choix_compte);
 			modifierCompte(c);break;
@@ -269,14 +249,6 @@ public class AppFoot {
 		}	
 
 		editerCompte();
-	}
-
-	private static void afficherComptes() {
-		System.out.println("\nListe des Comptes : \n");
-		for(Compte c : Context.getInstance().getDaoCompte().selectAll()) 
-		{
-			System.out.println(c);
-		}	
 	}
 
 	private static void modifierCompte(Compte c) {
@@ -318,7 +290,7 @@ public class AppFoot {
 	}
 
 	private static void supprimerCompte() {
-		afficherComptes();	
+		Compte.showAllCompte();	
 		int choix=saisieInt("Choisir un compte");
 
 		Context.getInstance().getDaoCompte().supprimer(choix);
@@ -337,7 +309,7 @@ public class AppFoot {
 		int choix = saisieInt("");
 		switch(choix) 
 		{
-		case 1:consulterEvenemets();break;
+		case 1:Evenement.showAllEvenement();break;
 		case 2:ajouterEvenemets();break;
 		case 3:modifierEvenemets();break;
 		case 4:supprimerEvenemets();break;
@@ -358,18 +330,14 @@ public class AppFoot {
 		String titre= saisieString("Entrez un titre");
 		String description= saisieString("Entrez une description de l'evenement");
 
-
-		Evenement ev = new Evenement(date, titre, description);
-
-
-		Context.getInstance().getDaoEvenement().ajouter(ev);
+		Evenement.creatEvenement(date, titre, description);
 
 		System.out.println("L'evenement a été crée!");
 		menuAdmin();	
 	}
 
 	private static void modifierEvenemets() {
-		consulterEvenemets();
+		Evenement.showAllEvenement();
 		int choix=saisieInt("Choisir un evenement");
 
 		Evenement ev = Context.getInstance().getDaoEvenement().selectById(choix);	
@@ -388,7 +356,7 @@ public class AppFoot {
 	}
 
 	private static void supprimerEvenemets() {
-		consulterEvenemets();
+		Evenement.showAllEvenement();
 
 		int choix=saisieInt("Choisir un compte");
 
@@ -408,7 +376,7 @@ public class AppFoot {
 		int choix = saisieInt("");
 		switch(choix) 
 		{
-		case 1:afficherArticles();break;
+		case 1:Article.showAllArticle();break;
 		case 2:ajouterArticles();break;
 		case 3:modifierArticles();break;
 		case 4:supprimerArticles();break;
@@ -417,14 +385,6 @@ public class AppFoot {
 		default: editerArticles(); break;
 		}			
 		editerArticles();
-	}
-
-	private static void afficherArticles() {
-		System.out.println("\nListe des Articles : \n");
-		for(Article a : Context.getInstance().getDaoArticle().selectAll()) 
-		{
-			System.out.println(a);
-		}	
 	}	
 
 	private static void ajouterArticles() {
@@ -436,16 +396,14 @@ public class AppFoot {
 		String taille= saisieString("Entrez une taille");
 		String description= saisieString("Entrez la description");
 
-		Article a = new Article(nom, prix, quantite, taille, description);
-
-		Context.getInstance().getDaoArticle().ajouter(a);
-
+		Article.creatArticle(nom, prix, quantite, taille, description);
+		
 		System.out.println("L'article a été crée!");
 		menuAdmin();	
 	}
 
 	private static void modifierArticles() {
-		afficherArticles();
+		Article.showAllArticle();
 		
 		int choix=saisieInt("Choisir un article");
 		
@@ -468,7 +426,7 @@ public class AppFoot {
 	}
 
 	private static void supprimerArticles() {
-		afficherArticles();
+		Article.showAllArticle();
 
 		int choix=saisieInt("Choisir un article");
 
@@ -487,7 +445,7 @@ public class AppFoot {
 		int choix = saisieInt("");
 		switch(choix) 
 		{
-		case 1:afficherTickets();break;
+		case 1:Ticket.showAllTicket();break;
 		case 2:ajouterTickets();break;
 		case 3:modifierTickets();break;
 		case 4:supprimerTickets();break;
@@ -495,14 +453,6 @@ public class AppFoot {
 
 		default: editerTickets(); break;	
 		}
-	}
-
-	private static void afficherTickets() {
-		System.out.println("\nListe des Tickets : \n");
-		for(Ticket t : Context.getInstance().getDaoTicket().selectAll()) 
-		{
-			System.out.println(t);
-		}	
 	}
 
 	private static void ajouterTickets() {
@@ -527,7 +477,7 @@ public class AppFoot {
 	}
 
 	private static void modifierTickets() {
-		afficherTickets();
+		Ticket.showAllTicket();
 		int choix=saisieInt("Choisir un ticket");
 
 		Ticket t = Context.getInstance().getDaoTicket().selectById(choix);	
@@ -549,7 +499,7 @@ public class AppFoot {
 	}
 
 	private static void supprimerTickets() {
-		afficherTickets();
+		Ticket.showAllTicket();
 
 		int choix=saisieInt("Choisir un ticket");
 
@@ -569,19 +519,22 @@ public class AppFoot {
 		System.out.println("4 - Consulter les tickets");
 		System.out.println("5 - Consulter mon panier");
 		System.out.println("6 - Modifier mon compte");
-		//TODO:afficher solde et crediter
-		System.out.println("7 - Deconnexion");
+		System.out.println("7 - Afficher mon solde");
+		System.out.println("8 - Crediter mon compte");
+		System.out.println("9 - Deconnexion");
 
 		int choix = saisieInt("");
 		switch(choix) 
 		{
-		case 1:consulterEvenemets();break;
+		case 1:Evenement.showAllEvenement();break;
 		case 2:consulterArticles();break;
 		case 3:consulterParies();break;
 		case 4:consulterTickets();break;
 		case 5:consulterPanier();break;
 		case 6:modifierCompte(connected);break;
-		case 7:menuPrincipal();;break;
+		case 7:afficheSolde();break;
+		case 8:creditSolde();break;
+		case 9:menuPrincipal();;break;
 		default: menuAdherent(); break;
 		}
 
@@ -589,8 +542,26 @@ public class AppFoot {
 	}
 
 
+	private static void creditSolde() {
+		boolean error = false;
+		do {
+			double credit = saisieDouble("Combien voulez-vous crediter ?");
+			try {
+				((Adherent) connected).creditSolde(credit);
+				error= false;
+			} catch (creditNotValid e) {
+				System.out.println(e.getMessage());
+				error = true;
+			}
+		}while(error);
+	}
+
+	private static void afficheSolde() {
+		System.out.println(((Adherent) connected).getSolde());
+	}
+
 	private static void consulterTickets() {
-		afficherTickets();
+		Ticket.showAllTicket();
 		
 		String choix = saisieString("Voulez-vous choisir un ticket ?");
 		if(choix.equals("Y")) {

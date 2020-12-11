@@ -37,10 +37,6 @@ public class Panier {
 	public void miseAJourQteProduit(Integer num_article, int qte) {
 		panier.put(num_article,qte);
 	}
-	
-//	public void showPanier() {
-//		
-//	}
 
 	public Map<Integer,Integer> getPanier() {
 		return panier;
@@ -106,5 +102,10 @@ public class Panier {
 			System.out.println("Solde insufisant ! Redirection vers payement par carte");
 			payerCarte();
 		}
+	}
+
+	public static void showPanier(Panier panier) {
+		System.out.println(panier.getPanier());
+		System.out.println("Total: "+ panier.totalPanier());	
 	}
 }

@@ -6,6 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 
+import Config.Context;
+
 @Entity
 public class Ticket extends Produit{
 	
@@ -45,6 +47,14 @@ public class Ticket extends Produit{
 		this.lieu = lieu;
 	}
 
+	public static void showAllTicket() {
+		System.out.println("\nListe des Tickets : \n");
+		for(Ticket t : Context.getInstance().getDaoTicket().selectAll()) 
+		{
+			System.out.println(t);
+		}	
+	}
+	
 	@Override
 	public String toString() {
 		return "Ticket [num_produit = " + num_produit + " date=" + date + ", lieu=" + lieu + ", prix=" + prix

@@ -3,6 +3,8 @@ package model;
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 
+import Config.Context;
+
 @Entity
 public class Article extends Produit{
 	
@@ -53,12 +55,27 @@ public class Article extends Produit{
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
+	
+	public static void showAllArticle() {
+		System.out.println("\nListe des Articles : \n");
+		for(Article a : Context.getInstance().getDaoArticle().selectAll()) 
+		{
+			System.out.println(a);
+		}
+	}
+	
+	public static void creatArticle(String nom, double prix, Integer quantite, String taille, String description) {
+		Article a = new Article(nom, prix, quantite, taille, description);
+		Context.getInstance().getDaoArticle().ajouter(a);
+	}
+	
 	@Override
 	public String toString() {
 		return "Article [num_produit = " + num_produit + " nom=" + nom + ", taille=" + taille + ", description="
 				+ description + ", prix=" + prix + ", quantite=" + quantite + "]";
 	}
+
+
 
 
 

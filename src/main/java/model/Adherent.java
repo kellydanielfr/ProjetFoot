@@ -2,6 +2,8 @@ package model;
 
 import javax.persistence.*;
 
+import Config.Context;
+
 @Entity
 @DiscriminatorValue("ADHERENT")
 public class Adherent extends Compte implements UserFunctions{
@@ -46,10 +48,16 @@ public class Adherent extends Compte implements UserFunctions{
 	public void setSolde(double solde) {
 		this.solde = solde;
 	}
-
-	public static void venteExceptionnelle() {
-		
+	
+	public void creditSolde(double credit) throws creditNotValid {
+		//API Banque
+		if(credit > 0) {
+			this.setSolde(solde+credit);
+		}else {
+			throw new creditNotValid("Vous ne pouvez crediter un montant negatif");
+		}
 	}
+	
 	
 	public static void achatTickts() {
 		
@@ -88,11 +96,13 @@ public class Adherent extends Compte implements UserFunctions{
 	}
 
 
-	
+
 	public String toString() {
 		return "Adherent [num_compte = " + num_compte + " solde=" + solde + ",  adresse=" + adresse + ", nom=" + nom + ", prenom="
 				+ prenom + ", num_compte=" + num_compte + ", login=" + login + ", password=" + password + "]";
 	}
+
+
 	
 	
 }

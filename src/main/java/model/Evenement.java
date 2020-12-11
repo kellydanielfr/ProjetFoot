@@ -4,6 +4,8 @@ import java.time.LocalDate;
 
 import javax.persistence.*;
 
+import Config.Context;
+
 @Entity
 public class Evenement {
 	
@@ -63,10 +65,23 @@ public class Evenement {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	@Override
-	public String toString() {
-		return "Evenement [id_evenement = " + id_evenement + " date=" + date + ", titre=" + titre + ", description=" + description + "]";
+	
+	public static void showAllEvenement() {
+		System.out.println("\nListe des Evenement : \n");
+		for(Evenement e : Context.getInstance().getDaoEvenement().selectAll()) 
+		{
+			System.out.println(e);
+		}	
 	}
 	
+	public static void creatEvenement(LocalDate date, String titre, String description) {
+		Evenement ev = new Evenement(date, titre, description);
+		Context.getInstance().getDaoEvenement().ajouter(ev);
+	}
 	
+	@Override
+	public String toString() {
+		return "Evenement n°" + id_evenement + ", Date de l'eveneent le " + date + ", Titre de l'evenement : " + titre + 
+				", Description de l'evenement : " + description;
+	}
 }
