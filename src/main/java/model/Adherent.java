@@ -1,5 +1,7 @@
 package model;
 
+import java.util.List;
+
 import javax.persistence.*;
 
 import Config.Context;
@@ -12,6 +14,8 @@ public class Adherent extends Compte implements UserFunctions{
 	
 	@Embedded
 	private Adresse adresse;
+	@OneToMany
+	private List<Pari> pari;
 	
 	public Adherent() {}
 	
