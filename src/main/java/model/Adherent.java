@@ -15,7 +15,7 @@ public class Adherent extends Compte implements UserFunctions{
 	
 	@Embedded
 	private Adresse adresse;
-	@OneToMany(fetch = FetchType.EAGER)
+	@OneToMany(fetch = FetchType.EAGER,mappedBy = "adherent")
 	private List<Pari> pari = new ArrayList<Pari>();
 	
 	public Adherent() {}

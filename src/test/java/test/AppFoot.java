@@ -234,7 +234,9 @@ public class AppFoot {
 	private static void validerParis() {
 		for(SiteParis p : Context.getInstance().getDaoSiteParis().selectAllEndded()) 
 		{
-			System.out.println(Context.getInstance().getDaoPari().selectPari(p.getId_match(), p.getResults()));
+			for(Pari pari : Context.getInstance().getDaoPari().selectPari(p.getId_match(), p.getResults())) {
+				//TODO: Finir
+			}
 		}
 	}
 

@@ -1,5 +1,7 @@
 package model;
 
+import java.util.List;
+
 import javax.persistence.*;
 
 @Entity
@@ -12,6 +14,8 @@ public class Pari {
 	private SiteParis match;
 	private double mise;
 	private String choix;
+	@ManyToOne
+	private Adherent adherent;
 	
 	public Pari() {
 	}
@@ -44,6 +48,22 @@ public class Pari {
 
 	public void setChoix(String choix) {
 		this.choix = choix;
+	}
+
+	public SiteParis getMatch() {
+		return match;
+	}
+
+	public void setMatch(SiteParis match) {
+		this.match = match;
+	}
+
+	public Adherent getAdherent() {
+		return adherent;
+	}
+
+	public void setAdherent(Adherent adherent) {
+		this.adherent = adherent;
 	}
 
 	@Override
