@@ -57,7 +57,6 @@ public class DAOCompteJPA implements IDAOCompte {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 
 		Query maRequete = em.createQuery("from Compte",Compte.class);
-
 		return maRequete.getResultList();
 	}
 
@@ -66,7 +65,6 @@ public class DAOCompteJPA implements IDAOCompte {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 
 		Query maRequete = em.createQuery("from Compte WHERE droit='ADMIN'",Compte.class);
-
 		return maRequete.getResultList();
 	}
 
@@ -88,6 +86,7 @@ public class DAOCompteJPA implements IDAOCompte {
 		maRequete.setParameter("loginReq",login);
 		maRequete.setParameter("password",mdp);
 		Compte c = (Compte) maRequete.getSingleResult();
+		em.close();
 		return c;
 		
 	}
@@ -102,8 +101,7 @@ public class DAOCompteJPA implements IDAOCompte {
 		try {
 			c = (Compte) maRequete.getSingleResult();
 		} catch (Exception e) {}
+		em.close();
 		return c;
 	}
-
-	
 }

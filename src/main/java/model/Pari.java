@@ -16,8 +16,8 @@ public class Pari {
 	public Pari() {
 	}
 
-	public Pari(Integer id_pari, double mise, String choix) {
-		this.id_pari = id_pari;
+	public Pari(SiteParis match, double mise, String choix) {
+		this.match = match;
 		this.mise = mise;
 		this.choix = choix;
 	}

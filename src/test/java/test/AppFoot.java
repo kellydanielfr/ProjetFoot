@@ -212,7 +212,8 @@ public class AppFoot {
 		System.out.println("2 - Gestion des evenementes");
 		System.out.println("3 - Gestion des articles");
 		System.out.println("4 - Gestion des tickets");
-		System.out.println("5 - Deconnection");
+		System.out.println("5 - Valider les paris");
+		System.out.println("6 - Deconnection");
 
 		int choix = saisieInt("");
 		switch(choix) 
@@ -221,11 +222,20 @@ public class AppFoot {
 		case 2:editerEvenemets();break;
 		case 3:editerArticles();break;
 		case 4:editerTickets();break;
-		case 5:menuPrincipal();;break;
+		case 5:validerParis();break;
+		case 6:menuPrincipal();;break;
+		
 		default: menuAdmin(); break;
 		}
 
 		menuAdmin();
+	}
+
+	private static void validerParis() {
+		for(SiteParis p : Context.getInstance().getDaoSiteParis().selectAllEndded()) 
+		{
+			System.out.println(Context.getInstance().getDaoPari().selectPari(p.getId_match(), p.getResults()));
+		}
 	}
 
 	//Manipulation Comptes
@@ -585,7 +595,7 @@ public class AppFoot {
 
 	//Paries
 	private static void consulterParies() {
-		afficherParie();
+		SiteParis.showAllParis();
 
 		System.out.println("Voulez vous prendre un pari? [Y/N]");
 
@@ -596,22 +606,26 @@ public class AppFoot {
 		case "N":menuAdherent();break;
 		default : consulterParies();break;
 		}
-
-		//TODO:function prise de parie
-		//TODO: function ajouter Panier
 	}
 	
 	private static void prisePari() {
-		//TODO: Selectioner pari
-		//TODO: ajouter au panier.
-	}
-
-	private static void afficherParie() {
-		// TODO: afficher les paris		
+		int num_match = saisieInt("Entrez le numero du pari");
+		SiteParis match = Context.getInstance().getDaoSiteParis().selectById(num_match);
+		System.out.println(match);
+		String resultat = saisieString("Sur quelle équipe voulez-vous parier ? (team1,nul,team2)");
+		double mise = saisieDouble("Quelle est votre mise");
+		
+		Pari pari = new Pari(match, mise, resultat);
+		Context.getInstance().getDaoPari().ajouter(pari);
+		
+		//payer();
+		((Adherent) connected).addPari(pari);
+		
+		Context.getInstance().getDaoCompte().modifier(connected);
 	}
 
 	public static void main(String[] args) {
-		
+
 		menuPrincipal();
 	}
 }

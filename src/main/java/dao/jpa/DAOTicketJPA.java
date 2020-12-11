@@ -56,7 +56,6 @@ public class DAOTicketJPA implements IDAOTicket{
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 
 		Query maRequete = em.createQuery("from Ticket",Ticket.class);
-
 		return maRequete.getResultList();
 	}
 

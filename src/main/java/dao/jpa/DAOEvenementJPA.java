@@ -56,7 +56,6 @@ public class DAOEvenementJPA implements IDAOEvenement {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 
 		Query maRequete = em.createQuery("from Evenement",Evenement.class);
-
 		return maRequete.getResultList();
 	}
 

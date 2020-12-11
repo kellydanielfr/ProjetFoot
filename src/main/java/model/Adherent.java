@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
@@ -14,8 +15,8 @@ public class Adherent extends Compte implements UserFunctions{
 	
 	@Embedded
 	private Adresse adresse;
-	@OneToMany
-	private List<Pari> pari;
+	@OneToMany(fetch = FetchType.EAGER)
+	private List<Pari> pari = new ArrayList<Pari>();
 	
 	public Adherent() {}
 	
@@ -62,12 +63,15 @@ public class Adherent extends Compte implements UserFunctions{
 		}
 	}
 	
-	
-	public static void achatTickts() {
-		
+	public void addPari(Pari pari) {
+		this.pari.add(pari);
 	}
 	
-	public static void priseParis() {
+	public void delPari(Pari pari) {
+		this.pari.remove(pari);
+	}
+
+	public static void achatTickts() {
 		
 	}
 	
@@ -106,7 +110,4 @@ public class Adherent extends Compte implements UserFunctions{
 				+ prenom + ", num_compte=" + num_compte + ", login=" + login + ", password=" + password + "]";
 	}
 
-
-	
-	
 }

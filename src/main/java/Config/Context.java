@@ -6,12 +6,16 @@ import javax.persistence.Persistence;
 import dao.IDAOArticle;
 import dao.IDAOCompte;
 import dao.IDAOEvenement;
+import dao.IDAOPari;
 import dao.IDAOProduit;
+import dao.IDAOSiteParis;
 import dao.IDAOTicket;
 import dao.jpa.DAOArticleJPA;
 import dao.jpa.DAOCompteJPA;
 import dao.jpa.DAOEvenementJPA;
+import dao.jpa.DAOPariJPA;
 import dao.jpa.DAOProduitJPA;
+import dao.jpa.DAOSiteParisJPA;
 import dao.jpa.DAOTicketJPA;
 
 
@@ -25,6 +29,8 @@ public class Context {
 	private IDAOEvenement daoEvenement= new DAOEvenementJPA();
 	private IDAOTicket daoTicket= new DAOTicketJPA();
 	private IDAOProduit daoProduit= new DAOProduitJPA();
+	private IDAOSiteParis daoSiteParis= new DAOSiteParisJPA();
+	private IDAOPari daoPari= new DAOPariJPA();
 
 
 
@@ -123,4 +129,29 @@ public class Context {
 	public void setDaoProduit(IDAOProduit daoProduit) {
 		this.daoProduit = daoProduit;
 	}
+
+
+
+	public IDAOSiteParis getDaoSiteParis() {
+		return daoSiteParis;
+	}
+
+
+
+	public void setDaoSiteParis(IDAOSiteParis daoSiteParis) {
+		this.daoSiteParis = daoSiteParis;
+	}
+
+
+
+	public IDAOPari getDaoPari() {
+		return daoPari;
+	}
+
+
+
+	public void setDaoPari(IDAOPari daoPari) {
+		this.daoPari = daoPari;
+	}
+
 }

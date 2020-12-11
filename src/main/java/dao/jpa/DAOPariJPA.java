@@ -6,15 +6,15 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import Config.Context;
-import dao.IDAOSiteParis;
+import dao.IDAOPari;
 import model.Pari;
-import model.SiteParis;
+import model.Pari;
 
 
-public class DAOSiteParisJPA implements IDAOSiteParis{
+public class DAOPariJPA implements IDAOPari{
 
 	@Override
-	public void ajouter(SiteParis t) {
+	public void ajouter(Pari t) {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 		em.getTransaction().begin();
 		em.persist(t);
@@ -23,7 +23,7 @@ public class DAOSiteParisJPA implements IDAOSiteParis{
 	}
 
 	@Override
-	public void modifier(SiteParis t) {
+	public void modifier(Pari t) {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 		em.getTransaction().begin();
 		t=em.merge(t);
@@ -45,30 +45,30 @@ public class DAOSiteParisJPA implements IDAOSiteParis{
 	}
 
 	@Override
-	public SiteParis selectById(Integer id) {
+	public Pari selectById(Integer id) {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
-		SiteParis a = em.find(SiteParis.class, id);
+		Pari a = em.find(Pari.class, id);
 		em.close();
 		return a;		
 	}
 
 	@Override
-	public List<SiteParis> selectAll() {
+	public List<Pari> selectAll() {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 
-		Query maRequete = em.createQuery("from SiteParis where results is null",SiteParis.class);
+		Query maRequete = em.createQuery("from Pari",Pari.class);
 
 		return maRequete.getResultList();
 	}
-
+	
 	@Override
-	public List<SiteParis> selectAllEndded() {
+	public List<Pari> selectPari(Integer id_match, String resultat) {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 
-		Query maRequete = em.createQuery("from SiteParis where results is not null",SiteParis.class);
+		Query maRequete = em.createQuery("from Pari where match_id_match=:match_id and choix=:resultat",Pari.class);
+		maRequete.setParameter("match_id",id_match);
+		maRequete.setParameter("resultat",resultat);
 
 		return maRequete.getResultList();
 	}
-	
-	
 }

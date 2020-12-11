@@ -56,7 +56,6 @@ public class DAOArticleJPA implements IDAOArticle{
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 
 		Query maRequete = em.createQuery("from Article",Article.class);
-
 		return maRequete.getResultList();
 	}
 

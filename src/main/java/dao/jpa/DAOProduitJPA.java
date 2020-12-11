@@ -55,7 +55,7 @@ public class DAOProduitJPA implements IDAOProduit{
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 
 		Query maRequete = em.createQuery("from produit",Produit.class);
-
+		
 		return maRequete.getResultList();
 	}
 
